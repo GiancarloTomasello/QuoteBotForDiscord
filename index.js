@@ -1,6 +1,8 @@
 //Import required modules
 const { Client, GatewayIntentBits} = require('discord.js');
 const axios = require('axios');
+const { getQuote, getAllQuotes, saveQuote} = require('./database');
+const { response } = require('express');
 require('dotenv').config();
 
 //Create a new Discord Client with message intent
@@ -32,23 +34,15 @@ client.on('messageCreate', async(message) => {
     }
 
     if(message.content.toLowerCase() == '!quote'){
-        const response = await axios.get('http://localhost:3000/quote')
-            .then(response =>{
+        const response = await getQuote()
+            .then( response => {
                 console.log(response);
-                console.log(response.data);
-                //const test = response.data.products[0];
-                //message.reply(`You have ${test.stock} ${test.title}`)
-                
-                //reply to message
-                message.reply(`${response.data.quote}`)
-                //send new message
-                client.channels.cache.get('934956511254446100').send(`${response.data.quote}`);
+                message.reply(`${response.quote}`)
+                client.channels.cache.get('934956511254446100').send(`${response.quote}`);
             })
-            .catch(error =>{
-               console.error('Error fetching data: ', error);
-            });
-        
-        //console.log(response.data.content);
+            .catch(error => {
+                console.log('Error fetching data: ', error);
+            })
     }
 
     if(message.content.toLocaleLowerCase() == '!addquote'){
