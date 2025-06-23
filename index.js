@@ -32,12 +32,17 @@ client.on('messageCreate', async(message) => {
     }
 
     if(message.content.toLowerCase() == '!quote'){
-        const response = await axios.get('https://dummyjson.com/products')
+        const response = await axios.get('http://localhost:3000/quote')
             .then(response =>{
-                //console.log(response);
-                //console.log(response.data.products);
-                const test = response.data.products[0];
-                message.reply(`You have ${test.stock} ${test.title}`)
+                console.log(response);
+                console.log(response.data);
+                //const test = response.data.products[0];
+                //message.reply(`You have ${test.stock} ${test.title}`)
+                
+                //reply to message
+                message.reply(`${response.data.quote}`)
+                //send new message
+                client.channels.cache.get('934956511254446100').send(`${response.data.quote}`);
             })
             .catch(error =>{
                console.error('Error fetching data: ', error);
