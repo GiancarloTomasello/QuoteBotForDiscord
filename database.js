@@ -30,8 +30,9 @@ const quoteModel = SetUpSchema();
 
 async function saveQuote(newQuote) {
     if(quoteModel){
-        console.log('saving to db');
+        //console.log('saving to db');
         const createdQuote = new quoteModel({quote: newQuote.quote, author: newQuote.author, dateCreated: newQuote.dateCreated});
+        //console.log("Created quote: " + createdQuote);
         await mongoose.connect(uri, clientOptions);
         await createdQuote.save();
         await mongoose.disconnect();
@@ -42,7 +43,7 @@ async function saveQuote(newQuote) {
 
 async function getAllQuotes() {
     if(quoteModel){
-        console.log('connect to database');
+        //console.log('connect to database');
         await mongoose.connect(uri, clientOptions);
         const quotes = await quoteModel.find();
         await mongoose.disconnect();
@@ -54,15 +55,15 @@ async function getAllQuotes() {
 
 async function getQuote(){
     if(quoteModel){
-        console.log('connect to database');
+        //console.log('connect to database');
         await mongoose.connect(uri, clientOptions);
         const quotes = await quoteModel.find();
         await mongoose.disconnect();
         
         //get random quote
         const randomIndex = Math.floor(Math.random() * quotes.length);
-        console.log(randomIndex);
-        console.log("Test: " + quotes[randomIndex]);
+        // console.log(randomIndex);
+        // console.log("Test: " + quotes[randomIndex]);
 
         return quotes[randomIndex];
     }else{

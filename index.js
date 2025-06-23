@@ -20,6 +20,8 @@ client.once('ready', () => {
     console.log(`🤖 Logged in as ${client.user.tag}`);
 });
 
+client
+
 //Listen and respond to messages
 client.on('messageCreate', async(message) => {
 
@@ -33,21 +35,33 @@ client.on('messageCreate', async(message) => {
         message.reply('Hi there! 👋 I am your friendly bot.');
     }
 
+    //split string to edit
+    const command = message.content.split('"');
+    console.log(command);
+    console.log(command[0].toLowerCase());
+
+
     if(message.content.toLowerCase() == '!quote'){
         const response = await getQuote()
             .then( response => {
                 console.log(response);
                 message.reply(`${response.quote}`)
-                client.channels.cache.get('934956511254446100').send(`${response.quote}`);
+                client.channels.cache.get(`${process.env.QUOTE_CHANNEL_ID}`).send(`${response.quote}`);
             })
             .catch(error => {
                 console.log('Error fetching data: ', error);
             })
     }
 
-    if(message.content.toLocaleLowerCase() == '!addquote'){
+    if(command[0].toLowerCase().trim() == "!addquote"){
+        console.log(message.content);
         console.log("Adding Quote To Database.....");
+        const author = command.length == 3 ? command[command.length-1] : '';
+
+
+        await saveQuote({quote: command[1], author: author});
     }
+
 });
 
 //Log in to Discord using token from .env
