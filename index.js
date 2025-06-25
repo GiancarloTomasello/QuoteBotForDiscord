@@ -25,21 +25,21 @@ client
 //Listen and respond to messages
 client.on('messageCreate', async(message) => {
 
-    console.log("Recieved a message");
-
     //Ignore messages from bots
     if(message.author.bot) return;
-
+    
+    console.log("Recieved a message");
+    
     //Respond to a specific message
     if(message.content.toLowerCase() == 'hello') {
         message.reply('Hi there! 👋 I am your friendly bot.');
     }
 
     //split string to edit
-    const command = message.content.split('"');
+     commandString = message.content;
 
-    if(command[0].slice(0,6).toLowerCase() == "!quote"){
-        if(message.channelId != process.env.QUOTE_CHANNEL_ID){
+    if(commandString.slice(0,6).toLowerCase() == "!quote"){
+        if(message.channelId != process.env.QUOTE_TEST_CHANNEL_ID){
             message.reply("Oops wrong channel. Please use the quote bot channel instead.");
             return;
         }
@@ -57,11 +57,18 @@ client.on('messageCreate', async(message) => {
             })
     }
 
-    if(command[0].toLowerCase().trim() == "!addquote"){
-        console.log(message.content);
+    if(commandString.slice(0,9).toLowerCase() == "!addquote"){
+        const quote = commandString.slice(9,commandString.length);
+        const author = message.member.displayName;
+        
+        if(!quote){
+            message.reply("No quote to add.")
+            return;
+        }
+
         console.log("Adding Quote To Database.....");
-        const author = command.length == 3 ? command[command.length-1] : '';
-        await saveQuote({quote: command[1], author: author})
+
+        await saveQuote({quote: quote, author: author})
             .then(() => {
                 message.reply("Quote added to database");
             })
