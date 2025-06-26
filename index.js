@@ -44,7 +44,7 @@ client.on('messageCreate', async(message) => {
 
         const response = await getQuote()
             .then( response => {
-                const chatMessage = response.author ? `${response.quote} ${response.author}` : `${response.quote}`
+                const chatMessage = response.quote;
                 message.reply(chatMessage)
                 //client.channels.cache.get(`${process.env.QUOTE_CHANNEL_ID}`).send(chatMessage);
             })
