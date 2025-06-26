@@ -27,9 +27,7 @@ client.on('messageCreate', async(message) => {
 
     //Ignore messages from bots
     if(message.author.bot) return;
-    
-    console.log("Recieved a message");
-    
+        
     //Respond to a specific message
     if(message.content.toLowerCase() == 'hello') {
         message.reply('Hi there! 👋 I am your friendly bot.');
@@ -39,15 +37,13 @@ client.on('messageCreate', async(message) => {
      commandString = message.content;
 
     if(commandString.slice(0,6).toLowerCase() == "!quote"){
-        if(message.channelId != process.env.QUOTE_TEST_CHANNEL_ID){
+        if(message.channelId != process.env.QUOTE_CHANNEL_ID){
             message.reply("Oops wrong channel. Please use the quote bot channel instead.");
             return;
         }
 
         const response = await getQuote()
             .then( response => {
-                console.log(response);
-
                 const chatMessage = response.author ? `${response.quote} ${response.author}` : `${response.quote}`
                 message.reply(chatMessage)
                 //client.channels.cache.get(`${process.env.QUOTE_CHANNEL_ID}`).send(chatMessage);
